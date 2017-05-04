@@ -1,0 +1,48 @@
+class parseJson {
+	public static void formatPrint(Object object) {
+		String data = object.toString();
+		char[] c = new char[data.length()];
+		data.getChars(0, data.length(), c, 0);
+		String suffix = "";
+		char singleChar ;
+		for(int i = 0,
+				length = c.length-1,
+				level = 0;
+				i<length;
+				i++) {
+			singleChar = c[i];
+			switch (singleChar) {
+			case '[': 
+				suffix = c[i+1]==']' ? "" : splace(++level);
+				break;
+			case '{':
+				suffix = c[i+1]=='}' ? "" : splace(++level); 
+				break;
+			case ']': 
+			case '}': 
+				suffix = c[i+1]==',' ? "" : splace(--level);  
+				break;
+			case ',':
+				suffix = splace(level);
+				break;
+			case '"':
+				suffix = c[i+1]=='}' ? 
+						splace(--level) : 
+						c[i+1]==']' ? splace(--level) : ""; 
+				break;
+			default : 
+				suffix = "";
+			}
+			System.out.print(singleChar +suffix);
+		}
+		System.out.print(c[c.length-1]);
+	}
+	
+	public static String splace(int count) {
+		String splace = "\n";
+		for(int i = 0; i<count; i++) {
+			splace += "  ";
+		}
+		return splace;
+	}
+}
