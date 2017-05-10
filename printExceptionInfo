@@ -1,18 +1,19 @@
 public void printExceptionInfo(Exception e) {
-		int i = 0;
-		Throwable e1 = e;
-		String packageName = new Object(){
-			public String bb() {
-				String[] name = this.getClass().getName().split("\\.");
-				return name.length>2 ? name[0] +"." +name[1] : name[0] ;
+	int i = 0;
+	Throwable e1 = e;
+	String packageName = new Object(){
+		public String bb() {
+			String[] name = this.getClass().getName().split("\\.");
+			return name.length>2 ? name[0] +"." +name[1] : name[0] ;
+		}
+	}.bb();
+	do {
+		System.err.println(" case" + i++ + " : " +e1.getClass());
+		System.err.println("message: " + e1.getMessage());
+		for(StackTraceElement stack : e1.getStackTrace()) {
+			if(stack.getClassName().startsWith(packageName)) {
+				System.err.println("\t" +stack.getClassName() +" : " +stack.getMethodName() +" : (" + stack.getFileName()+":"+stack.getLineNumber() +")");
 			}
-		}.bb();
-		do {
-			System.err.println("case" + i++ + " : " +e1.getMessage());
-			for(StackTraceElement stack : e1.getStackTrace()) {
-				if(stack.getClassName().startsWith(packageName)) {
-					System.out.println("\t" +stack.getClassName() +" : " +stack.getMethodName() +" : (" + stack.getFileName()+":"+stack.getLineNumber() +")");
-				}
-			}
-		} while((e1 = e1.getCause()) != null);
-	}
+		}
+	} while((e1 = e1.getCause()) != null);
+}
